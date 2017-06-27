@@ -44,7 +44,7 @@ class Executor():
         self.__cmd.angular.y = 0.0
         self.__cmd.angular.z = 0.0
 
-        sef.__power_cmd = MotorPower()
+        self.__power_cmd = MotorPower()
 
         # publishers and subscribers
         self.__velocity_pub = rospy.Publisher('mobile_base/commands/cmd_vel',
