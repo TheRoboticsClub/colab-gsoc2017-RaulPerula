@@ -64,6 +64,8 @@ class Executor():
         # enable motors
         self.__power_cmd.state = MotorPower.ON
         self.__motor_power_pub.publish(self.__power_cmd)
+        
+        rospy.sleep(1.0)
 
         # execute scratch program
         #Scratch.execute()
@@ -73,9 +75,13 @@ class Executor():
             self.__cmd.linear.x = 1.0
             self.__velocity_pub.publish(self.__cmd)
             
+            rospy.sleep(2.0)
+            
         # disable motors
         self.__power_cmd.state = MotorPower.OFF
         self.__motor_power_pub.publish(self.__power_cmd)
+        
+        rospy.sleep(1.0)
 
 
 if __name__ == '__main__':
