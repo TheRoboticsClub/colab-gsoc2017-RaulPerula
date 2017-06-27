@@ -14,7 +14,7 @@ __status__ = "Development"
 import roslib
 import rospkg
 import rospy
-import scratch
+#import scratch
 
 from geometry_msgs.msg import Twist
 from kobuki_msgs.msg import MotorPower
