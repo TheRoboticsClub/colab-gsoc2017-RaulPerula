@@ -47,7 +47,7 @@ class Executor():
         self.__power_cmd = MotorPower()
 
         # publishers and subscribers
-        self.__velocity_pub = rospy.Publisher('mobile_base/commands/cmd_vel',
+        self.__velocity_pub = rospy.Publisher('mobile_base/commands/velocity',
                                             Twist,
                                             latch=True,
                                             queue_size=1)
