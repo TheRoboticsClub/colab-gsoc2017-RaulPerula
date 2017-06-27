@@ -69,23 +69,9 @@ class Executor():
         #Scratch.execute()
 
         for i in range(3):
-            # stop
-            self.__cmd.linear.x = 0.0
-            self.__velocity_pub.publish(self.__cmd)
-
             # move
             self.__cmd.linear.x = 1.0
             self.__velocity_pub.publish(self.__cmd)
-
-            # sleep
-            rospy.sleep(5.0)
-
-            # stop
-            self.__cmd.linear.x = 0.0
-            self.__velocity_pub.publish(self.__cmd)
-
-            # sleep
-            rospy.sleep(2.0)
             
         # disable motors
         self.__power_cmd.state = MotorPower.OFF
