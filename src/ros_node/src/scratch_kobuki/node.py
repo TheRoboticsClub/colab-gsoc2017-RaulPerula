@@ -74,7 +74,7 @@ class Executor():
             self.__velocity_pub.publish(self.__cmd)
 
             # move
-            self.__cmd.linear.x = 0.1
+            self.__cmd.linear.x = 1.0
             self.__velocity_pub.publish(self.__cmd)
 
             # sleep
