@@ -7,17 +7,29 @@ import re
 import sys
 
 MAPPING = [
-	['repeat', 'for i in range(int(%s)):'],
-	['say', 'print %s'],
-	['move', 'kobuki.move()']
-	['end', '']
+	['end', ''],
+	['move', 'robot.move()'],
+	['repeat', 'for i in range(%s):'],
+	['say', 'print(%s)'],
+	['stop', 'robot.stop()'],
+	['wait', 'rospy.sleep(int("%s".replace(" secs", "")))'],
 ]
 
 # get current working directory
 path = os.getcwd()
-path = path[:path.rfind('src')] + 'data/'
+path = path[:path.rfind('scripts')] + 'data/'
 
 if len(sys.argv) == 2:
+	# template creation
+	template = "\
+#!/usr/bin/env python\n\
+# -*- coding: utf-8 -*-\n\n\
+import rospy\n\
+import robot\n\n\
+def execute():\n\
+\
+"
+	
 	# load the scratch project
 	p = kurt.Project.load(path + sys.argv[1])
 
@@ -26,26 +38,34 @@ if len(sys.argv) == 2:
 		for script in scriptable.scripts:
 			s = script
 
-	#~ print s
-	#~ print
+	print s
+	print
 
 	for b in s.blocks:
+		print b.stringify()
 		sentences = b.stringify().split('\n')
 		
-	#~ print sentences
-	#~ print
+	print sentences
+	print
 
-	python_program = ""
 	tab_seq = "\t"
+	python_program = "\t"
+	
 	for s in sentences:
 		aux = s.replace('    ', tab_seq).split(' ', 1)
 		for m in MAPPING:
 			if m[0] in aux[0]:
+				print m[0], aux[0]
+				python_program += tab_seq * aux[0].count(tab_seq)
 				if len(aux) > 1:
-					python_program += tab_seq * aux[0].count(tab_seq) + m[1] % aux[1]
-		python_program += "\n"
+					python_program += m[1] % aux[1]
+				else:
+					python_program += m[1]
+		python_program += "\n" + tab_seq
 
-	print python_program
+	print "-------------------"
+	print template + python_program
+	print "-------------------"
 	
 else:
 	print "ERROR: Number of parameters incorrect. Example:\n\tpython scratch2python.py hello_world.sb2"
