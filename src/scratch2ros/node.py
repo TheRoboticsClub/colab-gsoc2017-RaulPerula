@@ -10,7 +10,6 @@ __maintainer__ = "Raul Perula-Martinez"
 __email__ = "raules@gmail.com"
 __status__ = "Development"
 
-import robot
 import roslib
 import rospkg
 import rospy
@@ -18,8 +17,9 @@ import scratch
 
 from geometry_msgs.msg import Twist
 from kobuki_msgs.msg import MotorPower
+from robot import Robot
 
-pkg_name = 'scratch_kobuki'
+pkg_name = 'scratch2ros'
 roslib.load_manifest(pkg_name)
 
 
@@ -34,7 +34,7 @@ class Executor():
         Init method.
         """
 
-        pass
+        self.__robot = Robot()
 
     def run(self):
         """
@@ -42,20 +42,13 @@ class Executor():
         """
 
         # enable motors
-        robot.enable()
+        self.__robot.enable()
 
         # execute scratch program
-        # scratch.execute()
-
-        for i in range(3):
-            # move
-            self.__cmd.linear.x = 1.0
-            self.__velocity_pub.publish(self.__cmd)
-
-            rospy.sleep(2.0)
+        scratch.execute(self.__robot)
 
         # disable motors
-        robot.disable()
+        self.__robot.disable()
 
 
 if __name__ == '__main__':

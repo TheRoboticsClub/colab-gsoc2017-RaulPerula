@@ -25,9 +25,8 @@ if len(sys.argv) == 2:
     template = "\
 #!/usr/bin/env python\n\
 # -*- coding: utf-8 -*-\n\n\
-import rospy\n\
-import robot\n\n\
-def execute():\n\
+import rospy\n\n\
+def execute(robot):\n\
 "
 
     # load the scratch project
