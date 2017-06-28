@@ -31,7 +31,7 @@
 
     <!-- ROS packages dependencies -->
     <depend>rospy</depend>
-    
+
     <!-- tests dependencies -->
     <test_depend>rosunit</test_depend>
     <test_depend>rostest</test_depend>

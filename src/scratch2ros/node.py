@@ -33,27 +33,27 @@ class Executor():
         """
         Init method.
         """
-        
-		pass
+
+        pass
 
     def run(self):
         """
         Main loop.
         """
-        
+
         # enable motors
         robot.enable()
-        
+
         # execute scratch program
-        #scratch.execute()
+        # scratch.execute()
 
         for i in range(3):
             # move
             self.__cmd.linear.x = 1.0
             self.__velocity_pub.publish(self.__cmd)
-            
+
             rospy.sleep(2.0)
-            
+
         # disable motors
         robot.disable()
 

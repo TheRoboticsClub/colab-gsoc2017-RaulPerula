@@ -13,5 +13,5 @@ p = kurt.Project.load(path + 'test_scratch2.sb2')
 
 # show the blocks included
 for scriptable in p.sprites + [p.stage]:
-	for script in scriptable.scripts:
-		print script
+    for script in scriptable.scripts:
+        print script
