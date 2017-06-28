@@ -2,7 +2,7 @@
 
 1. Translate the Scratch program to Python
 
- ./scratch2python example.sb2
+ python scratch2python example.sb2
   
 2. Launch the kobuki robot in gazebo
 

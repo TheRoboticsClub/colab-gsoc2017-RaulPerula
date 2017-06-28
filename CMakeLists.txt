@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 2.8.3)
-project(scratch_kobuki)
+project(scratch2ros)
 
 ## Find catkin macros and libraries
 find_package(catkin REQUIRED COMPONENTS

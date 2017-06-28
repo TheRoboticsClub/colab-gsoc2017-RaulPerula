@@ -1,9 +1,9 @@
 <?xml version="1.0"?>
 <package format="2">
-    <name>scratch_kobuki</name>
+    <name>scratch2ros</name>
     <version>0.0.0</version>
     <description>
-        scratch_kobuki
+        scratch2ros
     </description>
 
     <!-- Author tags are optional, multiple are allowed, one per tag -->

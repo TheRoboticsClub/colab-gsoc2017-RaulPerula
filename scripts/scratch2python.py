@@ -17,7 +17,8 @@ MAPPING = [
 
 # get current working directory
 path = os.getcwd()
-path = path[:path.rfind('scripts')] + 'data/'
+open_path = path[:path.rfind('scripts')] + 'data/'
+save_path = path[:path.rfind('scripts')] + 'src/scratch2ros/'
 
 if len(sys.argv) == 2:
 	# template creation
@@ -31,7 +32,7 @@ def execute():\n\
 "
 	
 	# load the scratch project
-	p = kurt.Project.load(path + sys.argv[1])
+	p = kurt.Project.load(open_path + sys.argv[1])
 
 	# show the blocks included
 	for scriptable in p.sprites + [p.stage]:
@@ -62,10 +63,16 @@ def execute():\n\
 				else:
 					python_program += m[1]
 		python_program += "\n" + tab_seq
+		
+	file_text = template + python_program
 
 	print "-------------------"
-	print template + python_program
+	print file_text
 	print "-------------------"
+	
+	f = open(save_path + "scratch.py", "w")
+	f.write(file_text)
+	f.close()
 	
 else:
 	print "ERROR: Number of parameters incorrect. Example:\n\tpython scratch2python.py hello_world.sb2"

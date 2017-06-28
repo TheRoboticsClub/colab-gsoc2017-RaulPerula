@@ -42,13 +42,13 @@ class Robot():
 
         # publishers and subscribers
         self.__velocity_pub = rospy.Publisher('mobile_base/commands/velocity',
-												Twist,
-												latch=True,
-												queue_size=1)
+											  Twist,
+											  latch=True,
+											  queue_size=1)
         self.__motor_power_pub = rospy.Publisher('mobile_base/commands/motor_power',
-                                                MotorPower,
-                                                latch=True,
-                                                queue_size=1)
+                                                 MotorPower,
+                                                 latch=True,
+                                                 queue_size=1)
 
     def enable(self):
         """
