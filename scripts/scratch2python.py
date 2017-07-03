@@ -1,6 +1,15 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
+__author__ = "Raul Perula-Martinez"
+__copyright__ = "JdeRobot project"
+__credits__ = ["Raul Perula-Martinez"]
+__license__ = "GPL v3"
+__version__ = "0.0.0"
+__maintainer__ = "Raul Perula-Martinez"
+__email__ = "raules@gmail.com"
+__status__ = "Development"
+
 import kurt
 import os
 import re
@@ -8,11 +17,13 @@ import sys
 
 MAPPING = [
     ['end', ''],
+    ['if', 'if %s:'],
     ['move', 'robot.move()'],
     ['repeat', 'for i in range(%s):'],
     ['say', 'print(%s)'],
     ['stop', 'robot.stop()'],
     ['wait', 'rospy.sleep(int("%s".replace(" secs", "")))'],
+    ['while', 'while %s:'],
 ]
 
 # get current working directory
