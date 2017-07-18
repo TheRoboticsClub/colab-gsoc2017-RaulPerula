@@ -5,10 +5,24 @@
  roscd scratch2ros/script
  python scratch2python example.sb2
   
-2. Launch the kobuki robot in gazebo
+2. Launch the robot (simulation)
+
+'''ROS specific''':
+
+* Empty world:
 
  roslaunch kobuki_gazebo kobuki_empty_world.launch --screen
+ 
+* World with some obstacles:
 
-3. Launch the translated program
+ roslaunch turtlebot_gazebo turtlebot_world.launch
 
- roslaunch scratch2ros scratch2ros.launch
+'''ICE specific''':
+
+* Simple world:
+
+ gazebo kobuki-simple.world 
+
+3. Execute the translated python program
+
+ python node.py

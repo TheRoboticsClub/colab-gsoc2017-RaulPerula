@@ -1,5 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-
-<launch>
-    <node name="scratch2ros" pkg="scratch2ros" type="node.py" output="screen" />
-</launch>
