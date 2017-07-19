@@ -98,9 +98,9 @@ except KeyboardInterrupt:\n\
     print file_text
     print "-------------------"
 
-    #~ f = open(save_path + "scratch.py", "w")
-    #~ f.write(file_text)
-    #~ f.close()
+    f = open(save_path + "scratch.py", "w")
+    f.write(file_text)
+    f.close()
 
 else:
     print "ERROR: Number of parameters incorrect. Example:\n\tpython scratch2python.py hello_world.sb2"

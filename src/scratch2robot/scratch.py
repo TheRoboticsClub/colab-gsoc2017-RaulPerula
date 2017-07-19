@@ -8,11 +8,11 @@ def execute(robot):
     try:
         while True:
             robot.move()
-            time.sleep(int("5 secs".replace(" secs", "")))
+            time.sleep(int("2 secs".replace(" secs", "")))
             robot.stop()
             robot.turn()
-            time.sleep(int("10 secs".replace(" secs", "")))
+            time.sleep(int("3 secs".replace(" secs", "")))
             robot.stop()
     
     except KeyboardInterrupt:
-        sys.exit(0)
+        raise
