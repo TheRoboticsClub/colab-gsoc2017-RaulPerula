@@ -45,8 +45,19 @@ class Robot():
         .
         """
         
-        # set default velocity
+        # set default velocity (m/s)
         self.__vel.vx = 1.0
+        
+        # publish movement to the robot
+        self.__publish(self.__vel)
+
+    def turn(self):
+        """
+        .
+        """
+        
+        # set default velocity (m/s)
+        self.__vel.az = 1.0
         
         # publish movement to the robot
         self.__publish(self.__vel)
@@ -56,8 +67,13 @@ class Robot():
         .
         """
         
-        # set default velocity
+        # set default velocity (m/s)
         self.__vel.vx = 0.0
+        self.__vel.vy = 0.0
+        self.__vel.vz = 0.0
+        self.__vel.ax = 0.0
+        self.__vel.ay = 0.0
+        self.__vel.az = 0.0
 
         # publish movement to the robot
         self.__publish(self.__vel)
