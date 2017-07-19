@@ -18,10 +18,12 @@ import sys
 MAPPING = [
     ['end', ''],
     ['if', 'if %s:'],
+    ['move', 'robot.move(%s)'],
     ['move', 'robot.move()'],
     ['repeat', 'for i in range(%s):'],
     ['say', 'print(%s)'],
     ['stop', 'robot.stop()'],
+    ['turn', 'robot.turn(%s)'],
     ['turn', 'robot.turn()'],
     ['wait', 'time.sleep(int("%s".replace(" secs", "")))'],
     ['while', 'while %s:'],
@@ -85,10 +87,13 @@ except KeyboardInterrupt:\n\
                     python_program += tab_seq * (num_tabs + 1)
                 
                 # parse with params
-                if len(aux) > 1:
+                try:
                     python_program += m[1] % aux[1]
-                else:
+                except TypeError:
+                    pass
+                except:
                     python_program += m[1]
+
         python_program += "\n" + tab_seq
 
     file_text = template % python_program

@@ -40,24 +40,30 @@ class Robot():
         self.__client.sendVelocities(vel)
         time.sleep(1)
 
-    def move(self):
+    def move(self, vel=None):
         """
         .
         """
         
-        # set default velocity (m/s)
-        self.__vel.vx = 1.0
+        if vel == None:
+            # set default velocity (m/s)
+            self.__vel.vx = 1.0
+        else:
+            self.__vel.vx = vel
         
         # publish movement to the robot
         self.__publish(self.__vel)
 
-    def turn(self):
+    def turn(self, vel=None):
         """
         .
         """
         
-        # set default velocity (m/s)
-        self.__vel.az = 1.0
+        if vel == None:
+            # set default velocity (m/s)
+            self.__vel.az = 1.0
+        else:
+            self.__vel.az = vel
         
         # publish movement to the robot
         self.__publish(self.__vel)
@@ -67,7 +73,7 @@ class Robot():
         .
         """
         
-        # set default velocity (m/s)
+        # set default velocities (m/s)
         self.__vel.vx = 0.0
         self.__vel.vy = 0.0
         self.__vel.vz = 0.0
