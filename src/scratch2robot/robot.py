@@ -26,23 +26,48 @@ class Robot():
     def __init__(self, ic, node):
         """
         Init method.
+        
+        @param ic: 
+        @param node: 
         """
 
         # variables
         self.__vel = CMDVel()
-        self.__client = comm.getMotorsClient(ic, "robot.Motors", node)
+        self.__motors_client = comm.getMotorsClient(ic, "robot.Motors", node)
+        self.__laser_client = comm.getLaserClient(ic, "robot.Laser", node)
         
     def __publish(self, vel):
         """
         .
+        
+        @param vel: 
         """
         
-        self.__client.sendVelocities(vel)
+        self.__motors_client.sendVelocities(vel)
         time.sleep(1)
 
+    def get_laser_values(self):
+        """
+        .
+        
+        @return: the average measure from the frontal laser data.
+        """
+        
+        laser = self.__laser_client.getLaserData()
+        
+        total_data = len(laser.values)
+        num_data = 20
+        range1 = total_data / 2 - 10
+        range2 = total_data / 2 + 10
+
+        
+        return sum(laser.values[range1:range2]) / num_data
+        
     def move(self, vel=None):
         """
         .
+        
+        @param vel: 
         """
         
         if vel == None:
@@ -57,6 +82,8 @@ class Robot():
     def turn(self, vel=None):
         """
         .
+        
+        @param vel: 
         """
         
         if vel == None:
