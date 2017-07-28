@@ -2,11 +2,12 @@
     "extensionName": "Scratch2Robot",
     "extensionPort": 12345,
 	"blockSpecs": [
-		["", "stop robot", "stop/robot"],
-		["", "move robot %m.direction", "move/robot", "forward"],
-		["", "move robot %m.direction speed %n", "move/robot/speed", "forward", 1],
-		["", "turn robot %m.turnDirection", "turn/robot", "left"],
-		["", "turn robot %m.turnDirection speed %n", "turn/robot/speed", "left", 1]
+		["", "stop robot", "stop"],
+		["", "move robot %m.direction", "move", "forward"],
+		["", "move robot %m.direction speed %n", "move/speed", "forward", 1],
+		["", "turn robot %m.turnDirection", "turn", "left"],
+		["", "turn robot %m.turnDirection speed %n", "turn/speed", "left", 1],
+        ["r", "frontal laser distance", "laser/frontal"],
 	],
 	"menus": {
 		"direction": ["forward", "back"],
