@@ -22,11 +22,10 @@ from parse import parse, compile
 GENERAL = [
     ['end', ''],
     ['forever', 'while True:'],
-    ['if', 'if %s:'],
-    ['repeat', 'for i in range(%s):'],
-    ['say', 'print(%s)'],
+    ['if {} then', 'if %s:'],
+    ['repeat {}', 'for i in range(%s):'],
+    ['say {}', 'print(%s)'],
     ['wait {} secs', 'time.sleep(%s)'],
-    ['while', 'while %s:'],
 ]
 
 ROBOTICS = [
@@ -107,7 +106,10 @@ except KeyboardInterrupt:\n\
             p = compile(map0)
             args = p.parse(s.replace('    ', ''))
 
-            python_program += map1 % args.fixed
+            try:
+                python_program += map1 % args.fixed
+            except:
+                print("[WARN] The block <%s> is not included yet" % map0)
 
             python_program += "\n" + tab_seq
 
