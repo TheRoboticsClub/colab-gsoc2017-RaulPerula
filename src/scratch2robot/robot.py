@@ -26,81 +26,92 @@ class Robot():
     def __init__(self, ic, node):
         """
         Init method.
-        
+
         @param ic: 
         @param node: 
         """
 
         # variables
         self.__vel = CMDVel()
+
+        # set default velocities (m/s)
+        self.__vel.vx = 1.0
+        self.__vel.az = 1.0
+
+        # get clients
         self.__motors_client = comm.getMotorsClient(ic, "robot.Motors", node)
         self.__laser_client = comm.getLaserClient(ic, "robot.Laser", node)
-        
+
     def __publish(self, vel):
         """
         .
-        
+
         @param vel: 
         """
-        
+
         self.__motors_client.sendVelocities(vel)
         time.sleep(1)
 
     def get_laser_values(self):
         """
-        .
-        
-        @return: the average measure from the frontal laser data.
+        Get the average value for the values of the frontal laser.
+
+        @return: the average measure of the frontal laser data.
         """
-        
+
         laser = self.__laser_client.getLaserData()
-        
+
         total_data = len(laser.values)
         num_data = 20
         range1 = total_data / 2 - 10
         range2 = total_data / 2 + 10
 
-        
         return sum(laser.values[range1:range2]) / num_data
-        
-    def move(self, vel=None):
+
+    def move(self, direction, vel=None):
         """
-        .
-        
-        @param vel: 
+        Set the rectilinious movement of the robot.
+
+        @param direction: direction of the move. Options: forward (default), back.
+        @param vel: a number with the velocity in m/s. Default: 1 m/s.
         """
-        
-        if vel == None:
-            # set default velocity (m/s)
-            self.__vel.vx = 1.0
-        else:
+
+        # set different velocity
+        if vel != None:
             self.__vel.vx = vel
-        
-        # publish movement to the robot
+
+        # set different direction
+        if direction == "back":
+            self.__vel.vx = -self.__vel.vx
+
+        # publish movement of the robot
         self.__publish(self.__vel)
 
-    def turn(self, vel=None):
+    def turn(self, direction, vel=None):
         """
-        .
-        
-        @param vel: 
+        Set the angular movement of the robot.
+
+        @param direction: direction of the move. Options: left (default), right.
+        @param vel: a number with the velocity in m/s. Default: 1 m/s.
         """
-        
-        if vel == None:
-            # set default velocity (m/s)
-            self.__vel.az = 1.0
-        else:
+
+        # set different velocity
+        if vel != None:
             self.__vel.az = vel
-        
-        # publish movement to the robot
+
+        # set different direction
+        if direction == "right":
+            self.__vel.az = -self.__vel.az
+
+        # publish movement of the robot
         self.__publish(self.__vel)
 
     def stop(self):
         """
         .
         """
-        
-        # set default velocities (m/s)
+
+        # reset velocities (m/s)
         self.__vel.vx = 0.0
         self.__vel.vy = 0.0
         self.__vel.vz = 0.0
