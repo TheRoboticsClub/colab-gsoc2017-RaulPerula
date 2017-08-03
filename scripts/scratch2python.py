@@ -23,6 +23,7 @@ GENERAL = [
     ['end', ''],
     ['forever', 'while True:'],
     ['if {} then', 'if %s:'],
+    ['else', 'else:'],
     ['repeat {}', 'for i in range(%s):'],
     ['say {}', 'print(%s)'],
     ['wait {} secs', 'time.sleep(%s)'],
