@@ -34,10 +34,6 @@ class Robot():
         # variables
         self.__vel = CMDVel()
 
-        # set default velocities (m/s)
-        self.__vel.vx = 1.0
-        self.__vel.az = 1.0
-
         # get clients
         self.__motors_client = comm.getMotorsClient(ic, "robot.Motors", node)
         self.__laser_client = comm.getLaserClient(ic, "robot.Laser", node)
@@ -51,6 +47,19 @@ class Robot():
 
         self.__motors_client.sendVelocities(vel)
         time.sleep(1)
+
+    def __reset(self):
+        """
+        Reset the values to zero.
+        """
+
+        # reset velocities (m/s)
+        self.__vel.vx = 0.0
+        self.__vel.vy = 0.0
+        self.__vel.vz = 0.0
+        self.__vel.ax = 0.0
+        self.__vel.ay = 0.0
+        self.__vel.az = 0.0
 
     def get_laser_values(self):
         """
@@ -70,11 +79,17 @@ class Robot():
 
     def move(self, direction, vel=None):
         """
-        Set the rectilinious movement of the robot.
+        Set the straight movement of the robot.
 
         @param direction: direction of the move. Options: forward (default), back.
         @param vel: a number with the velocity in m/s. Default: 1 m/s.
         """
+
+        # reset values
+        self.__reset()
+
+        # set default velocity (m/s)
+        self.__vel.vx = 1.0
 
         # set different velocity
         if vel != None:
@@ -95,6 +110,12 @@ class Robot():
         @param vel: a number with the velocity in m/s. Default: 1 m/s.
         """
 
+        # reset values
+        self.__reset()
+
+        # set default velocity (m/s)
+        self.__vel.az = 1.0
+
         # set different velocity
         if vel != None:
             self.__vel.az = vel
@@ -108,16 +129,11 @@ class Robot():
 
     def stop(self):
         """
-        .
+        Set all velocities to zero in order to stop any move.
         """
 
-        # reset velocities (m/s)
-        self.__vel.vx = 0.0
-        self.__vel.vy = 0.0
-        self.__vel.vz = 0.0
-        self.__vel.ax = 0.0
-        self.__vel.ay = 0.0
-        self.__vel.az = 0.0
+        # reset values
+        self.__reset()
 
         # publish movement to the robot
         self.__publish(self.__vel)
