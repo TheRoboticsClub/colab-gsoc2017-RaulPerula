@@ -6,12 +6,19 @@ import time
 def execute(robot):
     try:
         while True:
-            robot.move("forward")
-            time.sleep(5)
-            robot.stop()
-            time.sleep(1)
-            robot.turn("left")
-            time.sleep(2)
+            if ((boolean) = '1'):
+                for i in range(10):
+                    print('Hello World')
+                    time.sleep(1)
+                
+            
+            if ((boolean) > '0'):
+                print('Hello World')
+                time.sleep(1)
+            else:
+                print('Hello World')
+                time.sleep(1)
+            
     
     except KeyboardInterrupt:
         raise
