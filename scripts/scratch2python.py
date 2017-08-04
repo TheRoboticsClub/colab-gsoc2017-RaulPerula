@@ -69,23 +69,24 @@ except KeyboardInterrupt:\n\
         # show the blocks included
         for scriptable in p.sprites + [p.stage]:
             for script in scriptable.scripts:
+                # exclude definition scripts
                 if "define" not in script.blocks[0].stringify():
                     s = script
 
-        print "Script:"
-        print s
+        print("Script:")
+        print(s)
         print
 
         print
-        print "Stringify:"
+        print("Stringify:")
         for b in s.blocks:
-            print b.stringify()
+            print(b.stringify())
             sentences = b.stringify().split('\n')
         print
 
         print
-        print "List:"
-        print sentences
+        print("List:")
+        print(sentences)
         print
 
         tab_seq = "\t"
@@ -105,6 +106,10 @@ except KeyboardInterrupt:\n\
 
             # extract arguments
             p = compile(map0)
+
+            if "if" in map0:
+                s = s.replace("'", "").replace("=", "==")
+
             args = p.parse(s.replace('    ', ''))
 
             try:
@@ -117,13 +122,14 @@ except KeyboardInterrupt:\n\
         file_text = template % python_program
         file_text = file_text.replace(tab_seq, ' ' * 4)
 
-        print "\n-------------------"
-        print file_text
-        print "-------------------\n"
+        print("\n-------------------")
+        print(file_text)
+        print("-------------------\n")
 
         f = open(save_path + "scratch.py", "w")
         f.write(file_text)
         f.close()
 
     else:
-        print "ERROR: Number of parameters incorrect. Example:\n\tpython scratch2python.py hello_world.sb2"
+        print(
+            "ERROR: Number of parameters incorrect. Example:\n\tpython scratch2python.py hello_world.sb2")
