@@ -44,41 +44,43 @@ MAPPING = GENERAL + ROBOTICS
 def is_conditional(sentence):
     """
     Returns if a sentence is conditional or not.
-    
+
     @param sentence: The sentence to check.
     @return: True if it has a conditional, False otherwise.
     """
-    
+
     if "if" in sentence:
         return True
-        
+
     return False
+
 
 def similar(a, b):
     """
     Returns the ratio value comparing two sentences.
-    
+
     @param a: First sentence.
     @param b: Second sentence.
     @return: The ratio of the similarity. 
     """
-    
+
     return SequenceMatcher(None, a, b).ratio()
+
 
 def sentence_mapping(sentence):
     """
     Maps a sentence and returns the original and the mapped.
-    
+
     @param sentence: The sentence to map.
     @return: The original sentence and the mapped sentence.
     """
-    
+
     l = [(m[0], m[1], similar(s, m[0])) for m in MAPPING]
     map0 = max(l, key=lambda item: item[2])[0]
     map1 = max(l, key=lambda item: item[2])[1]
-    
+
     return map0, map1
-    
+
 
 if __name__ == "__main__":
     # get current working directory
@@ -134,7 +136,7 @@ except KeyboardInterrupt:\n\
 
             if num_tabs > 0:
                 python_program += tab_seq * (num_tabs + 1)
-                
+
             # pre-processing if conditional
             if is_conditional(s):
                 s = s.replace("'", "").replace("=", "==")
