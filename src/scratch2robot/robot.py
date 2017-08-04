@@ -61,7 +61,7 @@ class Robot():
         self.__vel.ay = 0.0
         self.__vel.az = 0.0
 
-    def get_laser_values(self):
+    def get_laser_distance(self):
         """
         Get the average value for the values of the frontal laser.
 
