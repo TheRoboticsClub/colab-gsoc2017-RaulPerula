@@ -2,27 +2,37 @@
 
 1. Translate the Scratch program to Python
 
- roscd scratch2ros/script
- python scratch2python example.sb2
+```
+roscd scratch2ros/script
+python scratch2python example.sb2
+```
   
 2. Launch the robot (simulation)
 
-'''ROS specific''':
+**ROS specific**:
 
 * Empty world:
 
- roslaunch kobuki_gazebo kobuki_empty_world.launch --screen
- 
+```
+roslaunch kobuki_gazebo kobuki_empty_world.launch --screen
+```
+
 * World with some obstacles:
 
- roslaunch turtlebot_gazebo turtlebot_world.launch
+```
+roslaunch turtlebot_gazebo turtlebot_world.launch
+```
 
-'''ICE specific''':
+**ICE specific**:
 
 * Simple world:
 
- gazebo kobuki-simple.world 
+```
+gazebo kobuki-simple.world 
+```
 
 3. Execute the translated python program
 
- python node.py
+```
+python node.py
+```
