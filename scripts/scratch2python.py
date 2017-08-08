@@ -12,11 +12,11 @@ __status__ = "Development"
 
 import kurt
 import os
-import re
 import sys
 
 from difflib import SequenceMatcher
 from parse import parse, compile
+from termcolor import cprint
 
 
 GENERAL = [
@@ -26,6 +26,7 @@ GENERAL = [
     ['else', 'else:'],
     ['repeat {}', 'for i in range(%s):'],
     ['say {}', 'print(%s)'],
+    ['set {} to {}', '%s = %s'],
     ['wait {} secs', 'time.sleep(%s)'],
 ]
 
@@ -37,8 +38,6 @@ ROBOTICS = [
     ['turn robot {} speed {}', 'robot.turn("%s", %s)'],
     ['frontal laser distance', 'robot.get_laser_distance()'],
 ]
-
-MAPPING = GENERAL + ROBOTICS
 
 
 def is_conditional(sentence):
@@ -67,7 +66,7 @@ def similar(a, b):
     return SequenceMatcher(None, a, b).ratio()
 
 
-def sentence_mapping(sentence):
+def sentence_mapping(sentence, threshold=None):
     """
     Maps a sentence and returns the original and the mapped.
 
@@ -75,11 +74,48 @@ def sentence_mapping(sentence):
     @return: The original sentence and the mapped sentence.
     """
 
-    l = [(m[0], m[1], similar(s, m[0])) for m in MAPPING]
-    map0 = max(l, key=lambda item: item[2])[0]
-    map1 = max(l, key=lambda item: item[2])[1]
+    found = False
+    options = []
+    original = None
+    translation = None
 
-    return map0, map1
+    # first look for general blocks
+    for elem in GENERAL:
+        if elem[0][:3] == sentence.replace('    ', '')[:3]:
+            options.append(elem)
+            found = True
+
+    # then look for robotics blocks
+    for elem in ROBOTICS:
+        if elem[0][:3] == sentence.replace('    ', '').replace('(', '')[:3]:
+            options.append(elem)
+            found = True
+
+    if found:
+        # select the option that better fits
+        l = [(m[0], m[1], similar(sentence, m[0])) for m in options]
+        original, translation, score = max(l, key=lambda item: item[2])
+        if threshold and score < threshold:
+            return None, None
+
+        # extract arguments
+        p = compile(original)
+
+        args = p.parse(sentence.replace('    ', ''))
+
+        if args:
+            args_aux = list(args)
+
+            # look for more blocks
+            for idx in range(len(args_aux)):
+                new_ori, new_trans = sentence_mapping(args_aux[idx], 0.8)
+
+                if new_trans != None:
+                    args_aux[idx] = args_aux[idx].replace(new_ori, new_trans)
+
+            translation = translation % tuple(args_aux)
+
+    return original, translation
 
 
 if __name__ == "__main__":
@@ -111,20 +147,11 @@ except KeyboardInterrupt:\n\
                 if "define" not in script.blocks[0].stringify():
                     s = script
 
-        print("Script:")
-        print(s)
-        print
-
         print
         print("Stringify:")
         for b in s.blocks:
             print(b.stringify())
             sentences = b.stringify().split('\n')
-        print
-
-        print
-        print("List:")
-        print(sentences)
         print
 
         tab_seq = "\t"
@@ -137,24 +164,18 @@ except KeyboardInterrupt:\n\
             if num_tabs > 0:
                 python_program += tab_seq * (num_tabs + 1)
 
-            # pre-processing if conditional
+            # pre-processing if there is a condition (operators and types)
             if is_conditional(s):
                 s = s.replace("'", "").replace("=", "==")
 
             # mapping
             original, translation = sentence_mapping(s)
 
-            # extract arguments
-            p = compile(original)
-
-            args = p.parse(s.replace('    ', ''))
-
             # set the code
-            try:
-                python_program += translation % args.fixed
-            except Exception as e:
-                print("Exception: %s" % e)
-                print("[WARN] The block <%s> is not included yet" % original)
+            if translation != None:
+                python_program += translation
+            else:
+                cprint("[WARN] Block <%s> not included yet" % s, 'yellow')
 
             python_program += "\n" + tab_seq
 
@@ -163,7 +184,7 @@ except KeyboardInterrupt:\n\
         file_text = file_text.replace(tab_seq, ' ' * 4)
 
         print("\n-------------------")
-        print(file_text)
+        cprint(file_text, 'green')
         print("-------------------\n")
 
         # save the code in a python file
