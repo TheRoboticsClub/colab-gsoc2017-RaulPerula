@@ -1,2 +1,3 @@
+termcolor==1.1.0
 parse==1.8.2
 kurt==2.0.7
