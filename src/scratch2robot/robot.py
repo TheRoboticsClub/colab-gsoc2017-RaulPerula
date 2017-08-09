@@ -68,28 +68,32 @@ class Robot():
         @return: the average measure of the frontal laser data.
         """
 
+        # get laser values
         laser = self.__laser_client.getLaserData()
 
-        total_data = len(laser.values)
-        num_data = 20
-        range1 = total_data / 2 - 10
-        range2 = total_data / 2 + 10
+        # clean data (unranged values, e.g. nan)
+        l = [x for x in laser.values if str(x) != 'nan' and x < 10]
+        
+        try:
+            avg = sum(l) / len(l)
+        except ZeroDivisionError:
+            avg = 0
 
-        return sum(laser.values[range1:range2]) / num_data
+        return avg
 
     def move(self, direction, vel=None):
         """
         Set the straight movement of the robot.
 
         @param direction: direction of the move. Options: forward (default), back.
-        @param vel: a number with the velocity in m/s. Default: 1 m/s.
+        @param vel: a number with the velocity in m/s. Default: 0.2 m/s.
         """
 
         # reset values
         self.__reset()
 
         # set default velocity (m/s)
-        self.__vel.vx = 1.0
+        self.__vel.vx = 0.2
 
         # set different velocity
         if vel != None:
@@ -107,14 +111,14 @@ class Robot():
         Set the angular movement of the robot.
 
         @param direction: direction of the move. Options: left (default), right.
-        @param vel: a number with the velocity in m/s. Default: 1 m/s.
+        @param vel: a number with the velocity in m/s. Default: 0.2 m/s.
         """
 
         # reset values
         self.__reset()
 
         # set default velocity (m/s)
-        self.__vel.az = 1.0
+        self.__vel.az = 0.2
 
         # set different velocity
         if vel != None:
