@@ -3,7 +3,7 @@
 1. Translate the Scratch program to Python
 
 ```
-roscd scratch2ros/script
+roscd scratch2ros/scripts
 python scratch2python example.sb2
 ```
   
