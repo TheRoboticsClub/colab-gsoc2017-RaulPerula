@@ -1,5 +1,5 @@
 {
-    "extensionName": "Scratch2Robot",
+    "extensionName": "Scratch2JdeRobot",
     "extensionPort": 12345,
         "blockSpecs": [
                 ["", "stop robot", "stop"],
