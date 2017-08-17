@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 2.8.3)
-project(scratch2robot)
+project(scratch2jderobot)
 
 ## Find catkin macros and libraries
 find_package(catkin REQUIRED COMPONENTS
