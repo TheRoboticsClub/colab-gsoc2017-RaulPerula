@@ -21,15 +21,15 @@ from robot import Robot
 # get current working directory
 path = os.getcwd()
 open_path = path[:path.rfind('src')] + 'cfg/'
-filename = 'test.cfg'
+filename = 'robot.cfg'
 
 
 if __name__ == '__main__':
     # loading the ICE and ROS parameters
-    ic = EasyIce.initialize(['node.py', open_path + filename])
+    ic = EasyIce.initialize(['main_robot.py', open_path + filename])
     ic, node = comm.init(ic)
 
-    # creating the robot
+    # creating the object
     robot = Robot(ic, node)
     
     # executing the scratch program
