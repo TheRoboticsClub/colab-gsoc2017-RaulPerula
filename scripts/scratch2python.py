@@ -32,10 +32,13 @@ GENERAL = [
 
 ROBOTICS = [
     ['move robot {}', 'robot.move("%s")'],
+    ['move drone {}', 'robot.move("%s")'],
     ['move robot {} speed {}', 'robot.move("%s", %s)'],
-    ['stop robot', 'robot.stop()'],
-    ['turn robot {}', 'robot.turn("%s")'],
+    ['stop robot-drone', 'robot.stop()'],
+    ['turn robot-drone {}', 'robot.turn("%s")'],
     ['turn robot {} speed {}', 'robot.turn("%s", %s)'],
+    ['take off drone', 'robot.take_off()'],
+    ['land drone', 'robot.land()'],
     ['frontal laser distance', 'robot.get_laser_distance()'],
 ]
 
@@ -122,7 +125,7 @@ if __name__ == "__main__":
     # get current working directory
     path = os.getcwd()
     open_path = path[:path.rfind('scripts')] + 'data/'
-    save_path = path[:path.rfind('scripts')] + 'src/scratch2robot/'
+    save_path = path[:path.rfind('scripts')] + 'src/scratch2jderobot/'
 
     if len(sys.argv) == 2:
         # template creation
@@ -132,7 +135,7 @@ if __name__ == "__main__":
 import time\n\n\
 def execute(robot):\n\
 \ttry:\n\
-\t\t%s\
+\t%s\
 except KeyboardInterrupt:\n\
 \t\traise\n\
 "
@@ -149,20 +152,20 @@ except KeyboardInterrupt:\n\
 
         print
         print("Stringify:")
+        sentences = []
         for b in s.blocks:
             print(b.stringify())
-            sentences = b.stringify().split('\n')
+            sentences += b.stringify().split('\n')
         print
 
         tab_seq = "\t"
         python_program = ""
-
+        
         for s in sentences:
             # count number of tabs
             num_tabs = s.replace('    ', tab_seq).count(tab_seq)
 
-            if num_tabs > 0:
-                python_program += tab_seq * (num_tabs + 1)
+            python_program += tab_seq * (num_tabs + 1)
 
             # pre-processing if there is a condition (operators and types)
             if is_conditional(s):

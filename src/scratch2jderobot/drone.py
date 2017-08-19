@@ -14,9 +14,11 @@ __status__ = "Development"
 import math
 import time
 
+# TODO
 #~ from parallelIce.cameraClient import CameraClient
 #~ from parallelIce.navDataClient import NavDataClient
 #~ from parallelIce.pose3dClient import Pose3DClient
+
 from parallelIce.cmdvel import CMDVel
 from parallelIce.extra import Extra
 
@@ -27,86 +29,118 @@ class Drone():
     Drone class.
     """
 
-    def __init__(self, ic, node):
+    def __init__(self, ic, node=None):
         """
         Init method.
 
         @param ic: The ICE controller.
         @param node: The ROS node controller.
         """
-
-        #~ self.record = False
-        self.takeoff = False
-        self.reset = False
         
+        # TODO
         #~ self.camera = CameraClient(ic, "UAVViewer.Camera", True)
         #~ self.navdata = NavDataClient(ic, "UAVViewer.Navdata", True)
         #~ self.pose = Pose3DClient(ic, "UAVViewer.Pose3D", True)
+        
         self.cmdvel = CMDVel(ic, "drone.CMDVel")
         self.extra = Extra(ic, "drone.Extra")
 
-        def close(self):
+    def close(self):
         #~ self.camera.stop()
         #~ self.navdata.stop()
         #~ self.pose.stop()
             pass
-        
-    def reset(self):
-        """
-        
-        """
-        
-        if self.reset == True:
-            self.extra.reset()
-            self.reset = False
-        else:
-            self.extra.reset()
-            self.reset = True
 
-    def set_xyz_values(self, new_x, new_y):
+    def go_up_down(self, direction):
+        """
+        Set the straight movement of the drone.
+
+        @param direction: direction of the move. Options: forward (default), back.
         """
         
-        @param new_x: 
-        @param new_y: 
-        """
+        # set default velocity (m/s)
+        vz = 0.0
         
-        self.cmdvel.setVX(-new_y)
-        self.cmdvel.setVY(-new_x)
+        if direction == "down":
+            vz = -vz
         
+        # assign velocity
+        self.cmdvel.setVZ(vz)
+        
+        # publish movement
         self.cmdvel.sendVelocities()
 
-    def set_zyaw_values(self, new_z, new_yaw):
+    def move(self, direction):
+        """
+        Set the straight movement of the drone.
+
+        @param direction: direction of the move. Options: forward (default), back.
         """
         
-        @param new_z: 
-        @param new_yaw: 
+        # set default velocities (m/s)
+        vx = 5.0
+        vy = 0.0
+            
+        # set different direction
+        if direction == "back":
+            vx = -vx
+        elif direction == "left":
+            vy = float(vx)
+            vx = 0.0
+        elif direction == "right":
+            vy = float(-vx)
+            vx = 0.0
+        
+        # assign velocities
+        self.cmdvel.setVX(vx)
+        self.cmdvel.setVY(vy)
+        
+        # publish movement
+        self.cmdvel.sendVelocities()
+        
+    def turn(self, direction):
+        """
+        Set the angular velocty.
+
+        @param direction: direction of the move. Options: left (default), right.
         """
         
-        self.cmdvel.setVZ(-new_z)
-        self.cmdvel.setYaw(new_yaw)
+        # set default velocity (m/s)
+        yaw = 5.0 * math.pi
         
+        if direction == "right":
+            yaw = -yaw
+        
+        # assign velocity
+        self.cmdvel.setYaw(yaw)
+        
+        # publish movement
         self.cmdvel.sendVelocities()
 
     def stop(self):
         """
-        
+        Set all velocities to zero.
         """
         
-        #~ if self.record == True:
-            #~ self.extra.record(False)
-            
-        self.cmdvel.sendCMDVel(0, 0, 0, 0, 0, 0)
+        self.cmdvel.setVX(0)
+        self.cmdvel.setVY(0)
+        self.cmdvel.setVZ(0)
+        self.cmdvel.setYaw(0)
+        
+        self.cmdvel.sendVelocities()
             
     def take_off(self):
         """
-        
+        Send the take off command.
         """
         
         self.extra.takeoff()
+        time.sleep(1)
             
     def land(self):
         """
-        
+        Send the land command.
         """
         
         self.extra.land()
+        time.sleep(1)

@@ -7,11 +7,10 @@ def execute(robot):
     try:
         while True:
             if ((robot.get_laser_distance()) < 1.5):
-                robot.move("back")
-                robot.turn("left", 1)
+                robot.turn("left")
             else:
                 robot.move("forward")
             
-    
+        
     except KeyboardInterrupt:
         raise

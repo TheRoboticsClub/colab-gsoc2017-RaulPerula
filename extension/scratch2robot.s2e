@@ -2,15 +2,19 @@
     "extensionName": "Scratch2JdeRobot",
     "extensionPort": 12345,
         "blockSpecs": [
-                ["", "stop robot", "stop"],
-                ["", "move robot %m.direction", "move", "forward"],
-                ["", "move robot %m.direction speed %n", "move/speed", "forward", 1],
-                ["", "turn robot %m.turnDirection", "turn", "left"],
-                ["", "turn robot %m.turnDirection speed %n", "turn/speed", "left", 1],
+                ["", "stop robot-drone", "stop"],
+                ["", "move robot %m.robotDirections", "robot/move", "forward"],
+                ["", "move drone %m.droneDirections", "drone/move", "forward"],
+                ["", "move robot %m.robotDirections speed %n", "robot/move/speed", "forward", 1],
+                ["", "turn robot-drone %m.turnDirections", "turn", "left"],
+                ["", "turn robot %m.turnDirections speed %n", "turn/speed", "left", 1],
+                ["", "take off drone", "drone/takeoff"],
+                ["", "land drone", "drone/land"],
                 ["r", "frontal laser distance", "laser/frontal"],
         ],
         "menus": {
-                "direction": ["forward", "back"],
-                "turnDirection": ["left", "right"]
+                "robotDirections": ["forward", "back"],
+                "droneDirections": ["forward", "back", "left", "right"],
+                "turnDirections": ["left", "right"]
         }
 }

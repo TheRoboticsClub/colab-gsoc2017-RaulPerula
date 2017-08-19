@@ -7,17 +7,17 @@ roscd scratch2ros/scripts
 python scratch2python example.sb2
 ```
   
-2. Launch the robot (simulation)
+2. Launch the ROBOT or the DRONE (simulation)
 
 **ROS specific**:
 
-* Empty world:
+* Kobuki robot (empty world):
 
 ```
 roslaunch kobuki_gazebo kobuki_empty_world.launch --screen
 ```
 
-* World with some obstacles:
+* Turtlebot robot (with obstacles):
 
 ```
 roslaunch turtlebot_gazebo turtlebot_world.launch
@@ -25,14 +25,26 @@ roslaunch turtlebot_gazebo turtlebot_world.launch
 
 **ICE specific**:
 
-* Simple world:
+* Kobuki robot (laberinth):
 
 ```
-gazebo kobuki-simple.world 
+gazebo kobuki-simple.world
 ```
 
-3. Execute the translated python program
+* Parrot drone (empty world):
 
 ```
-python node.py
+gazebo ArDrone.world
+```
+
+3. Execute the translated python program (depending on the type of robot)
+
+```
+python main_robot.py
+```
+
+or
+
+```
+python main_drone.py
 ```

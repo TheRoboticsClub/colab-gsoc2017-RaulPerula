@@ -95,7 +95,7 @@ class Robot():
         # set default velocity (m/s)
         self.__vel.vx = 0.2
 
-        # set different velocity
+        # set different velocity than default
         if vel != None:
             self.__vel.vx = vel
 
@@ -103,7 +103,7 @@ class Robot():
         if direction == "back":
             self.__vel.vx = -self.__vel.vx
 
-        # publish movement of the robot
+        # publish movement
         self.__publish(self.__vel)
 
     def turn(self, direction, vel=None):
@@ -128,7 +128,7 @@ class Robot():
         if direction == "right":
             self.__vel.az = -self.__vel.az
 
-        # publish movement of the robot
+        # publish movement
         self.__publish(self.__vel)
 
     def stop(self):
@@ -139,5 +139,5 @@ class Robot():
         # reset values
         self.__reset()
 
-        # publish movement to the robot
+        # publish movement
         self.__publish(self.__vel)
