@@ -42,18 +42,24 @@ class Drone():
         @param node: The ROS node controller.
         """
         
-        self.camera = CameraClient(ic, "UAVViewer.Camera", True)
+        self.camera = CameraClient(ic, "drone.Camera", True)
         self.cmdvel = CMDVel(ic, "drone.CMDVel")
         self.extra = Extra(ic, "drone.Extra")
-        self.navdata = NavDataClient(ic, "UAVViewer.Navdata", True)
-        self.pose = Pose3DClient(ic, "UAVViewer.Pose3D", True)
+        self.navdata = NavDataClient(ic, "drone.Navdata", True)
+        self.pose = Pose3DClient(ic, "drone.Pose3D", True)
 
     def close(self):
         self.camera.stop()
         self.navdata.stop()
         self.pose.stop()
             
-    def color_object_centroid(frame, color):
+    def color_object_centroid(self):
+        # set color
+        color = BLUE_RANGE
+    
+        # get image from camera
+        frame = self.camera.getImage()
+        
         # resize the frame
         frame = imutils.resize(frame, width=600)
         
@@ -98,13 +104,13 @@ class Drone():
 
     def go_up_down(self, direction):
         """
-        Set the straight movement of the drone.
+        Set the vertical movement of the drone.
 
         @param direction: direction of the move. Options: forward (default), back.
         """
         
         # set default velocity (m/s)
-        vz = 0.0
+        vz = 1.0
         
         if direction == "down":
             vz = -vz
@@ -117,7 +123,7 @@ class Drone():
 
     def move(self, direction):
         """
-        Set the straight movement of the drone.
+        Set the horizontal movement of the drone.
 
         @param direction: direction of the move. Options: forward (default), back.
         """
@@ -145,7 +151,7 @@ class Drone():
         
     def turn(self, direction):
         """
-        Set the angular velocty.
+        Set the angular velocity.
 
         @param direction: direction of the move. Options: left (default), right.
         """

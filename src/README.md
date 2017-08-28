@@ -37,6 +37,12 @@ gazebo kobuki-simple.world
 gazebo ArDrone.world
 ```
 
+* Parrot drone (cat-mouse world):
+
+```
+gazebo ardrone-trees-simple.world
+```
+
 3. Execute the translated python program (depending on the type of robot)
 
 ```
