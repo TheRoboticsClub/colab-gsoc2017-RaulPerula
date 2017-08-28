@@ -32,15 +32,15 @@ if __name__ == '__main__':
 
     # creating the object
     robot = Drone(ic)
-    
+
     try:
         # executing the mouse behavior
         robot.take_off()
         time.sleep(1)
-        
+
         while True:
             robot.stop()
-        
+
         #~ robot.move("left")
         #~ time.sleep(3)
         #~ robot.stop()
@@ -61,13 +61,13 @@ if __name__ == '__main__':
         #~ time.sleep(3)
         #~ robot.stop()
         #~ time.sleep(1)
-        
+
         robot.land()
         time.sleep(1)
-        
+
     except KeyboardInterrupt:
         robot.land()
         time.sleep(1)
-    
+
     # destroying the common communications
     comm.destroy(ic, node)

@@ -31,9 +31,9 @@ if __name__ == '__main__':
 
     # creating the object
     robot = Drone(ic)
-    
+
     # executing the scratch program
     scratch.execute(robot)
-    
+
     # destroying the common communications
     comm.destroy(ic, node)

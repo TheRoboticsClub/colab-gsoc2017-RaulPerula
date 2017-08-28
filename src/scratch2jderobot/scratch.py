@@ -3,11 +3,12 @@
 
 import time
 
+
 def execute(robot):
     try:
         robot.take_off()
         time.sleep(3)
-        
+
         robot.go_up_down("up")
         time.sleep(4)
         robot.stop()
@@ -18,7 +19,7 @@ def execute(robot):
             if center != None:
                 print "MOUSE DETECTED: ", center
             time.sleep(2)
-        
+
     except KeyboardInterrupt:
         robot.land()
         time.sleep(1)

@@ -160,7 +160,7 @@ except KeyboardInterrupt:\n\
 
         tab_seq = "\t"
         python_program = ""
-        
+
         for s in sentences:
             # count number of tabs
             num_tabs = s.replace('    ', tab_seq).count(tab_seq)

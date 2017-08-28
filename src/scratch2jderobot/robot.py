@@ -73,7 +73,7 @@ class Robot():
 
         # clean data (unranged values, e.g. nan)
         l = [x for x in laser.values if str(x) != 'nan' and x < 10]
-        
+
         try:
             avg = sum(l) / len(l)
         except ZeroDivisionError:

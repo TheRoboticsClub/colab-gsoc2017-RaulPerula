@@ -24,7 +24,7 @@ from parallelIce.pose3dClient import Pose3DClient
 
 # define the lower and upper boundaries of the basic colors
 GREEN_RANGE = ((29, 86, 6), (64, 255, 255))
-RED_RANGE = ((139, 0, 0), (255,160,122))
+RED_RANGE = ((139, 0, 0), (255, 160, 122))
 BLUE_RANGE = ((0, 128, 128), (65, 105, 225))
 
 
@@ -41,7 +41,7 @@ class Drone():
         @param ic: The ICE controller.
         @param node: The ROS node controller.
         """
-        
+
         self.camera = CameraClient(ic, "drone.Camera", True)
         self.cmdvel = CMDVel(ic, "drone.CMDVel")
         self.extra = Extra(ic, "drone.Extra")
@@ -49,20 +49,30 @@ class Drone():
         self.pose = Pose3DClient(ic, "drone.Pose3D", True)
 
     def close(self):
+        """
+        Close communications with servers.
+        """
+
         self.camera.stop()
         self.navdata.stop()
         self.pose.stop()
-            
+
     def color_object_centroid(self):
-        # set color
+        """
+        Return the x,y centroid of a colorful object in the camera.
+
+        @return: The (x,y) centroid of the object or None if not found.
+        """
+
+        # FIXME: set color (manual)
         color = BLUE_RANGE
-    
+
         # get image from camera
         frame = self.camera.getImage()
-        
+
         # resize the frame
         frame = imutils.resize(frame, width=600)
-        
+
         # convert to the HSV color space
         hsv = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
 
@@ -73,9 +83,10 @@ class Drone():
         mask = cv2.erode(mask, None, iterations=2)
         mask = cv2.dilate(mask, None, iterations=2)
 
-        # find contours in the mask and 
+        # find contours in the mask and
         # initialize the current center
-        cnts = cv2.findContours(mask.copy(), cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)[-2]
+        cnts = cv2.findContours(
+            mask.copy(), cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)[-2]
         center = None
 
         # only proceed if at least one contour was found
@@ -91,15 +102,16 @@ class Drone():
             # only proceed if the radius meets a minimum size
             if radius > 10:
                 # draw the circle border
-                cv2.circle(frame, (int(x), int(y)), int(radius), (0, 255, 255), 2)
-                                
+                cv2.circle(
+                    frame, (int(x), int(y)), int(radius), (0, 255, 255), 2)
+
                 # and the centroid
                 cv2.circle(frame, center, 5, (0, 0, 255), -1)
 
         # show the frame to our screen
         cv2.imshow("Frame", frame)
         key = cv2.waitKey(1) & 0xFF
-        
+
         return center
 
     def go_up_down(self, direction):
@@ -108,16 +120,16 @@ class Drone():
 
         @param direction: direction of the move. Options: forward (default), back.
         """
-        
+
         # set default velocity (m/s)
         vz = 1.0
-        
+
         if direction == "down":
             vz = -vz
-        
+
         # assign velocity
         self.cmdvel.setVZ(vz)
-        
+
         # publish movement
         self.cmdvel.sendVelocities()
 
@@ -127,11 +139,11 @@ class Drone():
 
         @param direction: direction of the move. Options: forward (default), back.
         """
-        
+
         # set default velocities (m/s)
         vx = 5.0
         vy = 0.0
-            
+
         # set different direction
         if direction == "back":
             vx = -vx
@@ -141,30 +153,30 @@ class Drone():
         elif direction == "right":
             vy = float(-vx)
             vx = 0.0
-        
+
         # assign velocities
         self.cmdvel.setVX(vx)
         self.cmdvel.setVY(vy)
-        
+
         # publish movement
         self.cmdvel.sendVelocities()
-        
+
     def turn(self, direction):
         """
         Set the angular velocity.
 
         @param direction: direction of the move. Options: left (default), right.
         """
-        
+
         # set default velocity (m/s)
         yaw = 5.0 * math.pi
-        
+
         if direction == "right":
             yaw = -yaw
-        
+
         # assign velocity
         self.cmdvel.setYaw(yaw)
-        
+
         # publish movement
         self.cmdvel.sendVelocities()
 
@@ -172,26 +184,26 @@ class Drone():
         """
         Set all velocities to zero.
         """
-        
+
         self.cmdvel.setVX(0)
         self.cmdvel.setVY(0)
         self.cmdvel.setVZ(0)
         self.cmdvel.setYaw(0)
-        
+
         self.cmdvel.sendVelocities()
-            
+
     def take_off(self):
         """
         Send the take off command.
         """
-        
+
         self.extra.takeoff()
         time.sleep(1)
-            
+
     def land(self):
         """
         Send the land command.
         """
-        
+
         self.extra.land()
         time.sleep(1)
