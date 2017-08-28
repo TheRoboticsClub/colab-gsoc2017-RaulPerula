@@ -13,14 +13,19 @@ __status__ = "Development"
 
 import math
 import time
+import imutils
+import cv2
 
-# TODO
-#~ from parallelIce.cameraClient import CameraClient
-#~ from parallelIce.navDataClient import NavDataClient
-#~ from parallelIce.pose3dClient import Pose3DClient
-
+from parallelIce.cameraClient import CameraClient
 from parallelIce.cmdvel import CMDVel
 from parallelIce.extra import Extra
+from parallelIce.navDataClient import NavDataClient
+from parallelIce.pose3dClient import Pose3DClient
+
+# define the lower and upper boundaries of the basic colors
+GREEN_RANGE = ((29, 86, 6), (64, 255, 255))
+RED_RANGE = ((139, 0, 0), (255,160,122))
+BLUE_RANGE = ((0, 128, 128), (65, 105, 225))
 
 
 class Drone():
@@ -37,19 +42,59 @@ class Drone():
         @param node: The ROS node controller.
         """
         
-        # TODO
-        #~ self.camera = CameraClient(ic, "UAVViewer.Camera", True)
-        #~ self.navdata = NavDataClient(ic, "UAVViewer.Navdata", True)
-        #~ self.pose = Pose3DClient(ic, "UAVViewer.Pose3D", True)
-        
+        self.camera = CameraClient(ic, "UAVViewer.Camera", True)
         self.cmdvel = CMDVel(ic, "drone.CMDVel")
         self.extra = Extra(ic, "drone.Extra")
+        self.navdata = NavDataClient(ic, "UAVViewer.Navdata", True)
+        self.pose = Pose3DClient(ic, "UAVViewer.Pose3D", True)
 
     def close(self):
-        #~ self.camera.stop()
-        #~ self.navdata.stop()
-        #~ self.pose.stop()
-            pass
+        self.camera.stop()
+        self.navdata.stop()
+        self.pose.stop()
+            
+    def color_object_centroid(frame, color):
+        # resize the frame
+        frame = imutils.resize(frame, width=600)
+        
+        # convert to the HSV color space
+        hsv = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
+
+        # construct a mask for the color specified
+        # then perform a series of dilations and erosions
+        # to remove any small blobs left in the mask
+        mask = cv2.inRange(hsv, color[0], color[1])
+        mask = cv2.erode(mask, None, iterations=2)
+        mask = cv2.dilate(mask, None, iterations=2)
+
+        # find contours in the mask and 
+        # initialize the current center
+        cnts = cv2.findContours(mask.copy(), cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)[-2]
+        center = None
+
+        # only proceed if at least one contour was found
+        if len(cnts) > 0:
+            # find the largest contour in the mask, then use
+            # it to compute the minimum enclosing circle and
+            # centroid
+            c = max(cnts, key=cv2.contourArea)
+            ((x, y), radius) = cv2.minEnclosingCircle(c)
+            M = cv2.moments(c)
+            center = (int(M["m10"] / M["m00"]), int(M["m01"] / M["m00"]))
+
+            # only proceed if the radius meets a minimum size
+            if radius > 10:
+                # draw the circle border
+                cv2.circle(frame, (int(x), int(y)), int(radius), (0, 255, 255), 2)
+                                
+                # and the centroid
+                cv2.circle(frame, center, 5, (0, 0, 255), -1)
+
+        # show the frame to our screen
+        cv2.imshow("Frame", frame)
+        key = cv2.waitKey(1) & 0xFF
+        
+        return center
 
     def go_up_down(self, direction):
         """
