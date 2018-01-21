@@ -3,23 +3,16 @@
 
 import time
 
-
 def execute(robot):
     try:
-        robot.take_off()
-        time.sleep(3)
-
-        robot.go_up_down("up")
-        time.sleep(4)
-        robot.stop()
-        time.sleep(5)
-
+        counter = '0'
         while True:
-            center = robot.color_object_centroid()
-            if center != None:
-                print "MOUSE DETECTED: ", center
-            time.sleep(2)
-
+            print(len(l))
+            l.insert(0, counter)
+            print(l[0])
+            l.append('thing')
+            l.pop(1)
+            counter = counter + 1
+        
     except KeyboardInterrupt:
-        robot.land()
-        time.sleep(1)
+        raise
